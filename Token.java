@@ -71,76 +71,50 @@ public class Token {
         } else if ((row >= 0 && row <= 5) && (row - point < 0 && row - point >= -2) && column == 6) {
             column += Math.abs(row - point);
             row = 0;
-        }else if((row >= 0 && row <= 5 && row - point < -2) && column == 6){
+        } else if ((row >= 0 && row <= 5 && row - point < -2) && column == 6) {
             row = Math.abs(row - point) - 2;
             column = 8;
-        }else if (row == 0 && (column >= 6 && column <= 8 && column + point <= 8)){
+        } else if (row == 0 && (column >= 6 && column <= 8 && column + point <= 8)) {
             row = 0;
             column += point;
-        }else if(row == 0 && (column >= 6 && column <= 8 && column + point > 8)){
-            if(column == 8){
+        } else if (row == 0 && (column >= 6 && column <= 8 && column + point > 8)) {
+            if (column == 8) {
                 row += point;
-            }else {
+            } else {
                 row += point - (8 - column);
             }
             column = 8;
-        }else {
+        } else {
             upperRightMechanism();
         }
-
-//        if (row == 0 && column + point <= 8) {
-//            column += point;
-//        } else if (row == 0 && column + point > 8) {  // player 1 going down
-//            if (column == 8) {
-//                row += point;
-//            } else {
-//                row += point - (8 - column);
-//            }
-//            column = 8;
-//        } else if ((row >= 0 && row <= 5) && (row - point < 0 && row - point >= -2) && column == 6) { // player 1 going left
-//            column += Math.abs(row - point);
-//            row = 0;
-//        } else if ((row >= 0 && row <= 5 && row - point < -2) && (column >= 6 && column <= 8 )) { // player 1 going left and then going down
-//            row = Math.abs(row - point) - 2;
-//            column = 8;
-//        } else if (row < 6 && column == 6) { // player 1 going upward
-//            row -= point;
-//            column = 6;
-//        } else if (row == 6 && (column >= 0 && column <= 5 && column + point > 5)) { // player 1 first left turn
-//            row -= (column + point) - 5;
-//            column = 6;
-//        } else if (row == 6 && (column >= 0 && column <= 5 && column + point <= 5)) {
-//            row = 6;
-//            column += point;
-//        } else {
-//            upperRightMechanism();
-//        }
     }
 
     private void upperRightMechanism() {
-        if ((row + point >= 6 && row + point <= 8) && column == 14) {
+        if ((row >= 0 && row <= 5 && row + point <= 5) && column == 8) {
             row += point;
-        } else if (row + point > 8 && column == 14) { // player 1 going left
+            column = 8;
+        } else if ((row >= 0 && row <= 5 && row + point > 5) && column == 8) {
+            column += (row + point) - 5;
+            row = 6;
+        } else if (row == 6 && (column >= 9 && column <= 14 && column + point <= 14)) {
+            row = 6;
+            column += point;
+        } else if (row == 6 && (column >= 9 && column <= 14) && (column + point > 14 && column + point <= 16)) {
+            row += (column + point) - 14;
+            column = 14;
+        } else if (row == 6 && (column >= 9 && column <= 14) && (column + point > 16)) {
+            row = 8;
+            column = 14 - ((column + point) - 16);
+        } else if ((row >= 6 && row <= 8 && row + point <= 8) && column == 14) {
+            row += point;
+            column = 14;
+        } else if ((row >= 6 && row <= 8 && row + point > 8) && column == 14) {
             if (row == 8) {
                 column -= point;
             } else {
-                column -= point - (8 - row);
+                column -= (row + point - 8);
             }
             row = 8;
-        } else if (row == 6 && (column + point > 14 && column + point <= 16)) { // player 1 going right
-            row += Math.abs(14 - (column + point));
-            column = 14;
-        } else if (row == 6 && (column > 8 && column + point > 16)) { // player 1 going down and then right
-            row = 8;
-            column = 14 - Math.abs((column + point) - 16);
-        } else if ((row == 6 && column > 8) && column + point < 15) {
-            row = 6;
-            column += point;
-        } else if ((row >= 0 && row <= 5 && row + point > 5) && column == 8) { // player 1 turning left
-            column += (row + point) - 5;
-            row = 6;
-        } else if ((row >= 0 && row <= 5 && row + point <= 5) && column == 8) { // player 1 going down
-            row += point;
         } else {
             lowerRightMechanism();
         }
