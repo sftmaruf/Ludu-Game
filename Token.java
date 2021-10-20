@@ -53,7 +53,6 @@ public class Token {
     }
 
     private void calculatePosition() {
-//        lowerLeftMechanism();
         upperLeftMechanism();
     }
 
@@ -77,7 +76,7 @@ public class Token {
         } else if (row == 0 && (column >= 6 && column <= 8 && column + point <= 8)) {
             row = 0;
             column += point;
-        } else if (row == 0 && (column >= 6 && column <= 8 && column + point > 8)) {
+        } else if (row == 0 && (column >= 6 && column < 8 && column + point > 8)) {
             if (column == 8) {
                 row += point;
             } else {
@@ -102,17 +101,17 @@ public class Token {
         } else if (row == 6 && (column >= 9 && column <= 14) && (column + point > 14 && column + point <= 16)) {
             row += (column + point) - 14;
             column = 14;
-        } else if (row == 6 && (column >= 9 && column <= 14) && (column + point > 16)) {
+        } else if (row == 6 && (column >= 9 && column <= 14 && column + point > 16)) {
             row = 8;
             column = 14 - ((column + point) - 16);
         } else if ((row >= 6 && row <= 8 && row + point <= 8) && column == 14) {
             row += point;
             column = 14;
-        } else if ((row >= 6 && row <= 8 && row + point > 8) && column == 14) {
-            if (row == 8) {
+        } else if ((row >= 6 && row < 8 && row + point > 8) && column == 14) {
+            if (row == 8 && column - point >= 9) {
                 column -= point;
             } else {
-                column -= (row + point - 8);
+                column -= (row + point) - 8;
             }
             row = 8;
         } else {
@@ -121,53 +120,81 @@ public class Token {
     }
 
     private void lowerRightMechanism() {
-        if (row == 14 && column - point >= 6) {
+        if (row == 8 && (column >= 9 && column <= 14 && column - point >= 9)) {
+            row = 8;
+            column -= point;
+        } else if (row == 8 && (column >= 9 && column <= 14 && column - point < 9)) {
+            row += 9 - (column - point);
+            column = 8;
+        } else if ((row >= 9 && row <= 14 && row + point <= 14) && column == 8) {
+            row += point;
+            column = 8;
+        } else if ((row >= 9 && row <= 14) && (row + point > 14 && row + point <= 16) && column == 8) {
+            column -= (row + point) - 14;
+            row = 14;
+        } else if ((row >= 9 && row <= 14 && row + point > 16) && column == 8) {
+            column = 6;
+            row -= (row + point) - 16;
+        } else if (row == 14 && (column >= 6 && column <= 8 && column - point >= 6)) {
             row = 14;
             column -= point;
-        } else if (row == 14 && column - point < 6) {
+        } else if (row == 14 && (column >= 6 && column <= 8 && column - point < 6)) {
             if (column == 6) {
                 row -= point;
             } else {
-                row -= point - (column - 6);
+                row -= 6 - (column - point);
             }
             column = 6;
-        } else if ((row > 8 && column == 8) && (row + point > 14 && row + point <= 16)) {
-            column -= (row + point) - 14;
-            row = 14;
-        } else if ((row > 8 && column == 8) && row + point > 16) {
-            column = 6;
-            row -= (row + point) - 16;
-        } else if ((row > 8 && row <= 14) && column == 8) { // player 1 going down
-            row += point;
-            column = 8;
-        } else if ((row == 8 && column > 8) && column - point < 9) { // player 1 turn left
-            row += Math.abs((column - 9) - point);
-            column = 8;
-        } else if ((row == 8 && column > 8) && column - point > 8) { // player 1 going forward
-            row = 8;
-            column -= point;
         } else {
             lowerLeftMechanism();
         }
     }
 
     private void lowerLeftMechanism() {
-        if (row == 8 && (column < 6 && column - point < -2)) {
-            column = Math.abs(column - point) - 2;
-            row = 6;
-        } else if ((row == 8 && column < 6) && (column - point < 0 && column - point >= -2)) {
-            row -= Math.abs(column - point);
-            column = 0;
-        } else if ((row == 8 && column < 6) && (column - point >= 0 || column - point < 6)) {
-            row = 8;
-            column -= point;
-        } else if ((row - point < 9 && row > 8) && column == 6) {
-            column = 6 - Math.abs(9 - (row - point));
-            row = 8;
-        } else if ((row >= 9 && row <= 14 && row - point >= 9) && column == 6) {
+        if ((row >= 9 && row <= 14 && row - point >= 9) && column == 6) {
             row -= point;
             column = 6;
+        } else if ((row >= 9 && row <= 14 && row - point < 9) && column == 6) {
+            column -= 9 - (row - point);
+            row = 8;
+        } else if (row == 8 && (column >= 0 && column <= 5 && column - point >= 0)) {
+            row = 8;
+            column -= point;
+        } else if (row == 8 && (column <= 5 && column - point < 0 && column - point >= -2)) {
+            row -= Math.abs(column - point);
+            column = 0;
+        } else if (row == 8 && (column < 6 && column - point < -2)) {
+            column = Math.abs(column - point) - 2;
+            row = 6;
+        } else if ((row >= 6 && row <= 8 && row - point < 6) && column == 0) {
+            if (row == 6) {
+                column -= point;
+            } else {
+                column -= 6 - (row - point);
+            }
+            row = 6;
         }
+
+//        if (row == 8 && (column < 6 && column - point < -2)) {
+//            column = Math.abs(column - point) - 2;
+//            row = 6;
+//        }
+//        else if ((row == 8 && column < 6) && (column - point < 0 && column - point >= -2)) {
+//            row -= Math.abs(column - point);
+//            column = 0;
+//        }
+//        else if ((row == 8 && column < 6) && (column - point >= 0 || column - point < 6)) {
+//            row = 8;
+//            column -= point;
+//        }
+//        else if ((row - point < 9 && row > 8) && column == 6) {
+//            column = 6 - Math.abs(9 - (row - point));
+//            row = 8;
+//        }
+//        else if ((row >= 9 && row <= 14 && row - point >= 9) && column == 6) {
+//            row -= point;
+//            column = 6;
+//        }
     }
 
     private boolean isOpening() {
